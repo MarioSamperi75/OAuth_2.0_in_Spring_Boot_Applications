@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 	
 	@GetMapping
-	public Map<String, Object> getToken(@AuthenticationPrincipal Jwt jwt){
+	public Jwt getToken(@AuthenticationPrincipal Jwt jwt){
+	//public Map<String, Object> getToken(@AuthenticationPrincipal Jwt jwt){
 		
-		return Collections.singletonMap("principal", jwt);
+		
+		return jwt;
+		//return Collections.singletonMap("principal", jwt);
 	}
 	
 	
