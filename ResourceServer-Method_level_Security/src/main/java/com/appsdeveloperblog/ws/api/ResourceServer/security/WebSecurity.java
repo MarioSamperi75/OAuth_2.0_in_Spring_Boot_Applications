@@ -22,7 +22,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 					.antMatchers(HttpMethod.GET, "/users/status/check") 
 					//.hasAuthority("SCOPE_profile")
-					.hasRole("prutt")
+					.hasRole("developer")
 					//.hasAnyAuthority("ROLE_developer")
 					//.hasAnyRole("developer","user")
 				.anyRequest().authenticated()
