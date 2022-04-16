@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html>
+<!-- these line allows allows to read this page as a thymeleaf template engine-->
+<!--definition-->
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<!--info om thymeleaf namespace-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Album Page</h1>
+	<h1>Album Page</h1>
+				
+			<!--thymeleaf if statement syntax-->
+			<!-- we defined albums in the controller -->	
+			<div th:if="${albums.empty}">
+				<div>No albums found</div>
+			</div>
+			
+			<!--thymeleaf loop syntax-->
+			<div th:each="album : ${albums}">
+				<p>
+					<span th:text="${album.albumTitle}"></span>
+				</p>
+			</div>
+
 </body>
 </html>

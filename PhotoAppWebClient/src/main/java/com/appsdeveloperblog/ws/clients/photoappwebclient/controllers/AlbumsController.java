@@ -16,14 +16,14 @@ public class AlbumsController {
 	public String getAlbums (Model model) {		
 		
 		AlbumRest album = new AlbumRest();
-		album.setAlbumId("albumTwo");
-		album.setAlbumTitle("Album Two Title");
+		album.setAlbumId("albumOne");
+		album.setAlbumTitle("Album One Title");
 		album.setAlbumUrl("http://localhost:8082/albums/1");
 		
 		AlbumRest album2 = new AlbumRest();
-		album2.setAlbumId("albumOne");
-		album2.setAlbumTitle("Album One Title");
-		album2.setAlbumUrl("http://localhost:8082/albums/1");
+		album2.setAlbumId("albumTwo");
+		album2.setAlbumTitle("Album Two Title");
+		album2.setAlbumUrl("http://localhost:8082/albums/2");
 		
 		List returnValue = Arrays.asList(album, album2 );
 		
