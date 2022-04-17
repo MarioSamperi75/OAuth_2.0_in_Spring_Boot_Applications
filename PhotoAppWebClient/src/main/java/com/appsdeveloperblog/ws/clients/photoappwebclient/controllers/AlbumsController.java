@@ -3,6 +3,9 @@ package com.appsdeveloperblog.ws.clients.photoappwebclient.controllers;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,13 @@ import com.appsdeveloperblog.ws.clients.photoappwebclient.response.AlbumRest;
 public class AlbumsController {
 	
 	@GetMapping("/albums")
-	public String getAlbums (Model model) {		
+	//Oidcuser object:  all the info about the open id connect provider
+	public String getAlbums (Model model, @AuthenticationPrincipal OidcUser principal) {		
+		
+		System.out.println("Principal: " + principal);
+		OidcIdToken idToken = principal.getIdToken();
+		String idTokenValue = idToken.getTokenValue();
+		System.out.println("IdTokenValue: " + idTokenValue);
 		
 		AlbumRest album = new AlbumRest();
 		album.setAlbumId("albumOne");
