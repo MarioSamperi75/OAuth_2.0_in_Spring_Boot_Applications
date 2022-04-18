@@ -25,6 +25,7 @@ public class PhotoAppWebClientApplication {
 	
 	// to automatically detect the client configuration we need, due to the current authentication object
 	// an access token will be included into every single request
+	// not to use when communicating with other 3th party web services, we should send the access token!!
 	@Bean
 	public WebClient webClient(ClientRegistrationRepository clientRegistrationRepository, 
 			OAuth2AuthorizedClientRepository oauth2AuthorizedClientRepository) {
