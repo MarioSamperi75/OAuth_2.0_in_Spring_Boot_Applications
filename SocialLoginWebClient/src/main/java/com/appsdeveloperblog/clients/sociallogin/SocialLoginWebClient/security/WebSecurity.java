@@ -12,7 +12,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/").permitAll()
-		.anyRequest().authenticated().and().oauth2Login();
+		.anyRequest().authenticated()
+		.and().oauth2Login()
+		.and()
+		.logout()
+		.logoutSuccessUrl("/") 			// you can redirect the user wherever you want 
+		.invalidateHttpSession(true)	// true by default
+		.clearAuthentication(true)		// true by default	
+		.deleteCookies("JSESSIONID");	//  multiple arguments allowed, just type the name of the cookie
+										// ("","",""...)			
+		
 	}
 	
 
