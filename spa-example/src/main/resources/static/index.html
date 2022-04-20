@@ -1,5 +1,9 @@
 <!-- imported jquery from https://developers.google.com/speed/libraries -->
 <!-- generateState: generate an alphanumeric random string, as state for CSRF-->
+<!-- generateCodeVerifier & base64urlencode: random byte array encoded in base64-->
+
+
+
 
 <!DOCTYPE html>
 <html>
@@ -19,12 +23,32 @@ function generateState(length) {
 
     document.getElementById("stateValue").innerHTML = stateValue;
 }
+
+function generateCodeVerifier() {
+    var returnValue = "";
+    var randomByteArray = new Uint8Array(32);
+    window.crypto.getRandomValues(randomByteArray);
+
+    returnValue = base64urlencode(randomByteArray);
+    
+    document.getElementById("codeVerifierValue").innerHTML = returnValue;
+}
+
+function base64urlencode(sourceValue) {
+    var stringValue = String.fromCharCode.apply(null, sourceValue);
+    var base64Encoded = btoa(stringValue);
+    var base64urlEncoded = base64Encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    return base64urlEncoded;
+}
 </script>
 </head>
 <body>
 <h1>Index page</h1>
 <div id="stateValue"></div>
 <div><input type="button" value="Generate state value" onclick="generateState(30)"> </div>
+
+<div id="codeVerifierValue"></div>
+<div><input type="button" value="Generate Code Verifier value" onclick="generateCodeVerifier()"/></div>
 
 </body>
 </html>
