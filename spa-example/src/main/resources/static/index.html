@@ -7,8 +7,12 @@
 <!-- requestTokens: create the data object to our PKCE post request and
  	 send the request with ajax -->
 
-<!-- postRequestAccessToken: read the data from the body of the response
-	 and pass the contained access token to an html element -->
+<!-- getInfoFromResourceServer: now we have everything to get a resource from a protected server
+	 we send the ajax request... -->
+	 
+<!-- postInfoFromAccessToken: ...and we show the response data in an alert-->
+	 
+	 
 
 <!DOCTYPE html>
 <html>
@@ -112,6 +116,26 @@ function postRequestAccessToken(data, status, jqXHR) {
     document.getElementById("accessToken").innerHTML = data["access_token"];
 }
 
+function getInfoFromResourceServer(){
+	 
+    var accessToken = document.getElementById("accessToken").innerHTML;
+
+    $.ajax({
+        beforeSend: function (request) {
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+            request.setRequestHeader("Authorization", "Bearer " + accessToken);
+        },
+        type: "GET",
+        url: "http://localhost:8082/users/status/check",
+        success: postInfoFromAccessToken,
+        dataType: "text"
+    });
+}
+
+function postInfoFromAccessToken(data, status, jqXHR) {
+    alert(data);
+}
+
 </script>
 </head>
 <body>
@@ -128,6 +152,9 @@ function postRequestAccessToken(data, status, jqXHR) {
 <div><input type="button" value="Get Auth Code" onclick="getAuthCode()"/></div>
 
  <p>Access token: <span id="accessToken"></span></p>
+ 
+ <br/>
+ <div><input type="button" value="Load" onclick="getInfoFromResourceServer()"/></div>
 
 </body>
 </html>
