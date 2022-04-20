@@ -7,15 +7,19 @@
 <!-- requestTokens: create the data object to our PKCE post request and
  	 send the request with ajax -->
 
-<!-- postRequestAccessToken: read the data from the body of the response
-	 and pass the contained access token to an html element -->
+<!-- getInfoFromResourceServer: now we have everything to get a resource from a protected server
+	 we send the ajax request... -->
+	 
+<!-- postInfoFromAccessToken: ...and we show the response data in an alert-->
+	 
+	 
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Javascript application with PKCE</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script language="javascript">
 function generateState(length) {
@@ -53,12 +57,14 @@ async function generateCodeChallenge() {
     document.getElementById("codeChallengeValue").innerHTML = codeChallengeValue;
 }
 
+
 function base64urlencode(sourceValue) {
     var stringValue = String.fromCharCode.apply(null, sourceValue);
     var base64Encoded = btoa(stringValue);
     var base64urlEncoded = base64Encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     return base64urlEncoded;
 }
+
 
 function getAuthCode() {
     var state = document.getElementById("stateValue").innerHTML;
@@ -77,7 +83,7 @@ function getAuthCode() {
 }
 
 function postAuthorize(state, authCode) {
-var originalStateValue = document.getElementById("stateValue").innerHTML;
+	var originalStateValue = document.getElementById("stateValue").innerHTML;
 	
 	if(state === originalStateValue) {
 		requestTokens(authCode);
@@ -112,12 +118,34 @@ function postRequestAccessToken(data, status, jqXHR) {
     document.getElementById("accessToken").innerHTML = data["access_token"];
 }
 
+function getInfoFromResourceServer(){
+	 
+    var accessToken = document.getElementById("accessToken").innerHTML;
+
+    $.ajax({
+        beforeSend: function (request) {
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+            request.setRequestHeader("Authorization", "Bearer " + accessToken);
+        },
+        type: "GET",
+        url: "http://localhost:8082/users/status/check",
+        success: postInfoFromAccessToken,
+        dataType: "text"
+    });
+}
+
+function postInfoFromAccessToken(data, status, jqXHR) {
+    alert(data);
+}
+
 </script>
+
 </head>
 <body>
 <h1>Index page</h1>
+
 <div id="stateValue"></div>
-<div><input type="button" value="Generate state value" onclick="generateState(30)"> </div>
+<div><input type="button" value="Generate state value" onclick="generateState(30)"/></div>
 
 <div id="codeVerifierValue"></div>
 <div><input type="button" value="Generate Code Verifier value" onclick="generateCodeVerifier()"/></div>
@@ -128,6 +156,9 @@ function postRequestAccessToken(data, status, jqXHR) {
 <div><input type="button" value="Get Auth Code" onclick="getAuthCode()"/></div>
 
  <p>Access token: <span id="accessToken"></span></p>
+
+  <br/>
+  <div><input type="button" value="Load" onclick="getInfoFromResourceServer()"/></div>
 
 </body>
 </html>
