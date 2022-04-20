@@ -3,10 +3,12 @@
 <!-- generateCodeVerifier & base64urlencode: random byte array encoded in base64-->
 <!-- postAuthorize: We need to make sure that the value of the stateURL parameter 
 	 that the authorization server sent us
-	 matches the one that we have included in our original request. -->
+	 matches the one that we have included in our original request. -->	 
+<!-- requestTokens: create the data object to our PKCE post request and
+ 	 send the request with ajax -->
 
-
-
+<!-- postRequestAccessToken: read the data from the body of the response
+	 and pass the contained access token to an html element -->
 
 <!DOCTYPE html>
 <html>
@@ -83,6 +85,33 @@ var originalStateValue = document.getElementById("stateValue").innerHTML;
 		alert("Invalid state value received");
 	} 
 }
+
+function requestTokens(authCode) {
+    var codeVerifier = document.getElementById("codeVerifierValue").innerHTML;
+    var data = {
+        "grant_type": "authorization_code",
+        "client_id": "photo-app-PKCE-client",
+        "code": authCode,
+        "code_verifier": codeVerifier,
+        "redirect_uri":"http://localhost:8181/authcodeReader.html"
+    };
+
+    $.ajax({
+        beforeSend: function (request) {
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+        },
+        type: "POST",
+        url: "http://localhost:8080/auth/realms/appsdeveloperblog/protocol/openid-connect/token",
+        data: data,
+        success: postRequestAccessToken,
+        dataType: "json"
+    });
+}
+
+function postRequestAccessToken(data, status, jqXHR) {
+    document.getElementById("accessToken").innerHTML = data["access_token"];
+}
+
 </script>
 </head>
 <body>
@@ -97,6 +126,8 @@ var originalStateValue = document.getElementById("stateValue").innerHTML;
 <div><input type="button" value="Generate Code Challenge value" onclick="generateCodeChallenge()"/></div>
 <br/>
 <div><input type="button" value="Get Auth Code" onclick="getAuthCode()"/></div>
+
+ <p>Access token: <span id="accessToken"></span></p>
 
 </body>
 </html>
