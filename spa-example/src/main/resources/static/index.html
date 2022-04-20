@@ -1,6 +1,9 @@
 <!-- imported jquery from https://developers.google.com/speed/libraries -->
 <!-- generateState: generate an alphanumeric random string, as state for CSRF-->
 <!-- generateCodeVerifier & base64urlencode: random byte array encoded in base64-->
+<!-- postAuthorize: We need to make sure that the value of the stateURL parameter 
+	 that the authorization server sent us
+	 matches the one that we have included in our original request. -->
 
 
 
@@ -69,6 +72,10 @@ function getAuthCode() {
     authorizationURL += "&code_challenge_method=S256";
     
     window.open(authorizationURL, 'authorizationRequestWindow', 'width=800,height=600,left=200,top=200');
+}
+
+function postAuthorize(state, authCode) {
+alert("State: " + state + ", authCode: " + authCode);
 }
 </script>
 </head>
