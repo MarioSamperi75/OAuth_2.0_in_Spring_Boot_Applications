@@ -128,7 +128,10 @@ function getInfoFromResourceServer(){
             request.setRequestHeader("Authorization", "Bearer " + accessToken);
         },
         type: "GET",
-        url: "http://localhost:8082/users/status/check",
+        // if you use the gateway
+        //url: "http://localhost:8082/users/status/check",
+        // check the right port when starting resource server!!
+        url: "http://localhost:57449/users/status/check",
         success: postInfoFromAccessToken,
         dataType: "text"
     });
